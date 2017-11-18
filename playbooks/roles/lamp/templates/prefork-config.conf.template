@@ -1,0 +1,9 @@
+<IfModule mpm_prefork_module>
+    StartServers            50
+    MinSpareServers         50
+    MaxSpareServers         100
+    MaxRequestWorkers       300
+    MaxClients              500
+    ServerLimit             500
+    MaxConnectionsPerChild  1000
+</IfModule>

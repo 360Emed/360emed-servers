@@ -1,0 +1,4 @@
+---
+# The variables file used by the playbook.
+system_modules:
+  - mysql*

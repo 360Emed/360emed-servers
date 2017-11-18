@@ -1,0 +1,31 @@
+---
+# setup initialization vars
+- include_vars: default-config.yml
+
+# create group
+- group: name=emed_admin state=present gid="{{ gid }}"
+
+# create group
+- group: name=webteam state=present gid="{{ webteam_gid }}"
+
+# create user
+- user: name=emed_admin comment="Deploy User" uid="{{ uid }}" group=webteam
+  become: true
+  become_user: root  
+
+# setup directory to make sure it exists
+- file: path=/home/emed_admin/.ssh owner=emed_admin group=emed_admin mode=700 state=directory recurse=yes
+
+# install selinux python, required by ansible
+- name: Install Ansible Required Modules
+  yum:
+    name: "selinux-python"
+    state: "latest"
+  become: true
+  become_user: root  
+  ignore_errors: true
+
+# Setup Sudoer for deployment user
+- lineinfile: "dest=/etc/sudoers state=present line='emed_admin ALL=(ALL) NOPASSWD: ALL'"
+  become: true
+  become_user: root

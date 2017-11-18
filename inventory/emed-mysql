@@ -1,0 +1,6 @@
+[emed-web]
+emedhmt.eastus.cloudapp.azure.com
+
+[emed-web:vars]
+service_account=apptadmin
+php_version=php7

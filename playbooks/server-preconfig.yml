@@ -1,0 +1,8 @@
+---
+- hosts: all
+  become: true
+  become_user: root
+  vars:
+      host_key_checking: false
+  roles:
+    - server-preconfig

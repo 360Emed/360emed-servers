@@ -1,0 +1,27 @@
+# global servername setup
+ServerName {{ inventory_hostname }}
+
+<VirtualHost *:80>
+    DocumentRoot /var/www/html/default_root
+    ServerName {{ ansible_default_ipv4.address }}
+    ServerAlias {{ inventory_hostname }}
+    RewriteEngine on
+    RewriteCond %{HTTPS} off
+    RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301]
+</VirtualHost>
+
+<VirtualHost *:443>
+    DocumentRoot /var/www/html/default_root
+    ServerName {{ ansible_default_ipv4.address }}
+    ServerAlias {{ inventory_hostname }}
+    SSLEngine on
+</VirtualHost>
+
+<Directory "/var/www/html/default_root">
+    AllowOverride NONE
+    Require all granted
+</Directory>
+<Directory "/var/www/html/">
+    AllowOverride ALL
+    Require all granted
+</Directory>

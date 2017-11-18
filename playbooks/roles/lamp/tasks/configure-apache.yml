@@ -1,0 +1,136 @@
+---
+# setup Security
+
+# create group
+- user: name=apache state=present 
+  become: true
+  become_user: root 
+
+# enable selinux for apache to connect external port
+- name: Configure Apache Include for Port Listener
+  command: "/sbin/setsebool -P httpd_can_network_connect 1"
+  ignore_errors: yes
+  become: true
+  become_user: root 
+
+# pre-configure directory
+- file: path=/etc/httpd/certs mode=755 state=directory recurse=yes
+  become: true
+  become_user: root  
+
+# Apache need a home tooooo
+- file: path=/home/apache mode=755 state=directory recurse=yes owner=apache
+  become: true
+  become_user: root  
+
+- file: path=/var/www/html/default_root mode=755 state=directory recurse=yes
+  become: true
+  become_user: root  
+
+# pre-configure directory
+- file: path=/etc/httpd/conf.vhosts.d mode=755 state=directory recurse=yes
+  become: true
+  become_user: root  
+
+# Create SSL Certificate
+- name: Generate Certificates
+  command: openssl req -new -nodes -x509 -subj "/C=US/ST=NY/L=New York/O=MCIT/CN={{ ansible_fqdn }}" -days 3650 -keyout {{ ssl_key_path }} -out {{ ssl_cert_path }}
+  become: true
+  become_user: root  
+
+# setup apache include file
+- name: Clean Up includes
+  lineinfile:
+    dest: /etc/httpd/conf/httpd.conf
+    state: absent
+    line: "IncludeOptional conf.vhosts.d/*.conf"
+  become: true
+  become_user: root  
+
+- name: Clean Up includes
+  lineinfile:
+    dest: /etc/httpd/conf/httpd.conf
+    state: absent
+    line: "IncludeOptional conf.d/*.conf"
+  become: true
+  become_user: root  
+  
+# setup apache include file
+- name: Configure Apache Include
+  lineinfile:
+    dest: /etc/httpd/conf/httpd.conf
+    state: present
+    line: "IncludeOptional conf.vhosts.d/*.conf"
+  become: true
+  become_user: root  
+
+# setup apache include file, do this after vhosts or SSL will be messed up
+- name: Configure Apache Include
+  lineinfile:
+    dest: /etc/httpd/conf/httpd.conf
+    state: present
+    line: "IncludeOptional conf.d/*.conf"
+  become: true
+  become_user: root  
+
+# setup apache run mode to use MPM
+- name: Configure Apache Include
+  lineinfile:
+    dest: /etc/httpd/conf.modules.d/00-mpm.conf
+    state: present
+    line: "LoadModule mpm_prefork_module modules/mod_mpm_prefork.so"
+  become: true
+  become_user: root  
+
+# setup apache run mode to use MPM
+- name: Configure Apache Include
+  lineinfile:
+    dest: /etc/httpd/conf.modules.d/00-mpm.conf
+    state: absent
+    line: "LoadModule mpm_worker_module modules/mod_mpm_worker.so"
+  become: true
+  become_user: root  
+
+- name: Configure Apache Server SSL
+  template: src=ssl-conf.template dest="/etc/httpd/conf.d/ssl-nyumc-conf.conf"
+  become: true
+  become_user: root  
+  ignore_errors: true
+
+# configure the mpm worker
+- name: Configure Apache Proxy Server
+  template: src=mpm-config.conf.template dest="/etc/httpd/conf.modules.d/mpm-config.conf"
+  become: true
+  become_user: root  
+  
+# configure the mpm worker
+- name: Configure Apache Proxy Server
+  template: src=prefork-config.conf.template dest="/etc/httpd/conf.modules.d/prefork-config.conf"
+  become: true
+  become_user: root  
+
+- name: Configure Apache User
+  user:
+    name: apache
+    shell: /bin/false
+    groups: webteam
+    append: yes
+  become: true
+  become_user: root  
+
+- name: Configure Apache vHosts
+  template: src=default-vhost.conf.template dest="/etc/httpd/conf.vhosts.d/default-vhosts.conf"
+  become: true
+  become_user: root  
+  ignore_errors: true
+
+- name: Enable Apache to be Boot on Restart
+  command: systemctl enable httpd24-httpd.service
+  become: true
+  become_user: root
+
+# restart the services
+- name: Restart Apache
+  service: name=httpd24-httpd state=restarted
+  become: true
+  become_user: root  

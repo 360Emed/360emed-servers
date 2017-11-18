@@ -1,0 +1,25 @@
+---
+# Setup httpd mod_php config
+- name: Configure apache php configurations
+  template: src=php70-config.template dest="/etc/httpd/conf.modules.d/php-config.conf"
+  become: true
+  become_user: root  
+  
+# update php memory limit
+- ini_file: dest=/etc/opt/rh/rh-php70/php.ini section=global option=memory_limit value=256M
+  become: true
+  become_user: root 
+  ignore_errors: true
+
+# up php execution time
+- ini_file: dest=/etc/opt/rh/rh-php70/php.ini section=global option=max_execution_time value=1200
+  become: true
+  become_user: root 
+  ignore_errors: true
+  
+# update php timezone
+- ini_file: dest=/etc/opt/rh/rh-php70/php.ini section=Date option=date.timezone value=America/New_York
+  become: true
+  become_user: root 
+  ignore_errors: true
+

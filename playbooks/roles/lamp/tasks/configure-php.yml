@@ -1,0 +1,7 @@
+- include: configure-php7.yml
+
+# restart the services
+- name: Restart Apache
+  service: name=httpd24-httpd state=restarted
+  become: true
+  become_user: root  

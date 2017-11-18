@@ -1,0 +1,4 @@
+# ssl cert setup 
+SSLCipherSuite ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP
+SSLCertificateKeyFile {{ ssl_key_path }}
+SSLCertificateFile {{ ssl_cert_path }}

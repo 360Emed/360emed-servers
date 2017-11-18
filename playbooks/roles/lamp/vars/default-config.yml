@@ -1,0 +1,17 @@
+---
+# The variables file used by the playbook.
+system_modules:
+  # apache with mod SSL
+  - httpd24
+  - httpd24-mod_ssl
+  - httpd24-httpd-devel
+  - libxml2
+  - libxml2-devel
+  - mysql
+  - rh-php70*
+  - php55*
+  - git
+  - httpd24-mod_proxy_html
+# Default ssh configuration
+ssl_key_path: /etc/httpd/certs/server.key
+ssl_cert_path: /etc/httpd/certs/server.crt

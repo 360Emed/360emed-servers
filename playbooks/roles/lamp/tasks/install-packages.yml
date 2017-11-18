@@ -1,0 +1,15 @@
+---
+# install the varinsh modules and apache modules
+- name: Install the Apache Server
+  yum:
+    name: "{{ item }}"
+    state: "latest"
+  with_items: "{{ system_modules }}"
+  become: true
+  become_user: root  
+  
+# Setup sudo access for service account
+- lineinfile: "dest=/etc/sudoers state=present line='{{service_account}} ALL=(ALL) NOPASSWD: ALL'"
+  become: true
+  become_user: root  
+ 
