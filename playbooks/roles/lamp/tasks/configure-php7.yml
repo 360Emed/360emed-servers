@@ -1,7 +1,7 @@
 ---
 # Setup httpd mod_php config
 - name: Configure apache php configurations
-  template: src=php70-config.template dest="/etc/httpd/conf.modules.d/php-config.conf"
+  template: src=php70-config.template dest="/opt/rh/httpd24/root/etc/httpd/conf.modules.d/php-config.conf"
   become: true
   become_user: root  
   

@@ -2,6 +2,7 @@
 # The variables file used by the playbook.
 system_modules:
   # apache with mod SSL
+  - centos-release-scl
   - httpd24
   - httpd24-mod_ssl
   - httpd24-httpd-devel

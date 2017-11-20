@@ -1,0 +1,9 @@
+---
+- hosts: all
+  become: true
+  become_user: "{{ service_account }}"
+  remote_user: "{{ service_account }}"
+  vars:
+      host_key_checking: false
+  roles:
+    - mysql

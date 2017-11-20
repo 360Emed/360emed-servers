@@ -1,10 +1,15 @@
 ---
 - include_vars: default-config.yml
 # install the varinsh modules and apache modules
-- name: Install the Apache Server
+- name: Install the mysql Server
   yum:
     name: "{{ item }}"
     state: "latest"
   with_items: "{{ system_modules }}"
+  become: true
+  become_user: root
+
+- name: Enable mysql to be Boot on Restart
+  command: systemctl enable mysql55-mysqld.service
   become: true
   become_user: root

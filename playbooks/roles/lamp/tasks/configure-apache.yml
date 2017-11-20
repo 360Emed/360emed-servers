@@ -14,7 +14,7 @@
   become_user: root 
 
 # pre-configure directory
-- file: path=/etc/httpd/certs mode=755 state=directory recurse=yes
+- file: path=/opt/rh/httpd24/root/etc/httpd/certs mode=755 state=directory recurse=yes
   become: true
   become_user: root  
 
@@ -28,7 +28,7 @@
   become_user: root  
 
 # pre-configure directory
-- file: path=/etc/httpd/conf.vhosts.d mode=755 state=directory recurse=yes
+- file: path=/opt/rh/httpd24/root/etc/httpd/conf.vhosts.d mode=755 state=directory recurse=yes
   become: true
   become_user: root  
 
@@ -41,7 +41,7 @@
 # setup apache include file
 - name: Clean Up includes
   lineinfile:
-    dest: /etc/httpd/conf/httpd.conf
+    dest: /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf
     state: absent
     line: "IncludeOptional conf.vhosts.d/*.conf"
   become: true
@@ -49,7 +49,7 @@
 
 - name: Clean Up includes
   lineinfile:
-    dest: /etc/httpd/conf/httpd.conf
+    dest: /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf
     state: absent
     line: "IncludeOptional conf.d/*.conf"
   become: true
@@ -58,7 +58,7 @@
 # setup apache include file
 - name: Configure Apache Include
   lineinfile:
-    dest: /etc/httpd/conf/httpd.conf
+    dest: /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf
     state: present
     line: "IncludeOptional conf.vhosts.d/*.conf"
   become: true
@@ -67,7 +67,7 @@
 # setup apache include file, do this after vhosts or SSL will be messed up
 - name: Configure Apache Include
   lineinfile:
-    dest: /etc/httpd/conf/httpd.conf
+    dest: /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf
     state: present
     line: "IncludeOptional conf.d/*.conf"
   become: true
@@ -76,7 +76,7 @@
 # setup apache run mode to use MPM
 - name: Configure Apache Include
   lineinfile:
-    dest: /etc/httpd/conf.modules.d/00-mpm.conf
+    dest: /opt/rh/httpd24/root/etc/httpd/conf.modules.d/00-mpm.conf
     state: present
     line: "LoadModule mpm_prefork_module modules/mod_mpm_prefork.so"
   become: true
@@ -92,20 +92,20 @@
   become_user: root  
 
 - name: Configure Apache Server SSL
-  template: src=ssl-conf.template dest="/etc/httpd/conf.d/ssl-nyumc-conf.conf"
+  template: src=ssl-conf.template dest="/opt/rh/httpd24/root/etc/httpd/conf.d/ssl-nyumc-conf.conf"
   become: true
   become_user: root  
   ignore_errors: true
 
 # configure the mpm worker
 - name: Configure Apache Proxy Server
-  template: src=mpm-config.conf.template dest="/etc/httpd/conf.modules.d/mpm-config.conf"
+  template: src=mpm-config.conf.template dest="/opt/rh/httpd24/root/etc/httpd/conf.modules.d/mpm-config.conf"
   become: true
   become_user: root  
   
 # configure the mpm worker
 - name: Configure Apache Proxy Server
-  template: src=prefork-config.conf.template dest="/etc/httpd/conf.modules.d/prefork-config.conf"
+  template: src=prefork-config.conf.template dest="/opt/rh/httpd24/root/etc/httpd/conf.modules.d/prefork-config.conf"
   become: true
   become_user: root  
 
@@ -119,7 +119,7 @@
   become_user: root  
 
 - name: Configure Apache vHosts
-  template: src=default-vhost.conf.template dest="/etc/httpd/conf.vhosts.d/default-vhosts.conf"
+  template: src=default-vhost.conf.template dest="/opt/rh/httpd24/root/etc/httpd/conf.vhosts.d/default-vhosts.conf"
   become: true
   become_user: root  
   ignore_errors: true

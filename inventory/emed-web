@@ -1,5 +1,5 @@
 [emed-web]
-emedhmt.eastus.cloudapp.azure.com
+fasma01.westus2.cloudapp.azure.com
 
 [emed-web:vars]
 service_account=apptadmin
