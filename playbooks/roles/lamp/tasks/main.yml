@@ -2,6 +2,7 @@
 # setup vars
 - include_vars: default-config.yml
 - include: install-packages.yml
+- include: configure-hosts.yml
 - include: configure-apache.yml
 - include: configure-php.yml
 
